@@ -88,6 +88,7 @@ def problem_multiple_passengers(verbose, domain):
 
 if __name__ == '__main__':
     from optparse import OptionParser
+
     parser = OptionParser(usage="Usage: %prog [options]")
     parser.add_option('-q', '--quiet',
                       action='store_false', dest='verbose', default=True,
@@ -100,4 +101,3 @@ if __name__ == '__main__':
 
     domain = create_domain_multiple_passengers()
     problem_multiple_passengers(opts.verbose, domain)
-

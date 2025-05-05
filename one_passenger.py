@@ -2,7 +2,6 @@ from __future__ import print_function
 from pyddl import Domain, Action, neg
 from planner import planner
 
-
 def create_domain_one_passenger():
     domain = Domain((
         Action(
@@ -14,12 +13,12 @@ def create_domain_one_passenger():
                 ('position', 'by'),  # New location on the y-axis
             ),
             preconditions=(
-                ('dec', 'py', 'by'),  # by = py - 1
-                ('at', 't', 'px', 'py'),  # TODO: shouldn't it be by instead of py?
+                ('dec', 'py', 'by'),  # by = py - 1, assuming decreasing y is up
+                ('at', 't', 'px', 'py'),  # Taxi is at current position
             ),
             effects=(
-                neg(('at', 't', 'px', 'py')),  # TODO: and also in here
-                ('at', 't', 'px', 'by'),
+                neg(('at', 't', 'px', 'py')),  # Remove old position
+                ('at', 't', 'px', 'by'),       # Set new position
             ),
         ),
         Action(
@@ -82,11 +81,13 @@ def create_domain_one_passenger():
                 ('passenger', 'p'),
             ),
             preconditions=(
-                ('on_taxi', 'p'),
-                ('at', 't', 'px', 'py'),
+                ('at', 't', 'px', 'py'),  # Taxi is at position
+                ('at', 'p', 'px', 'py'),  # Passenger is at same position
             ),
             effects=(
-
+                neg(('at', 'p', 'px', 'py')),  # Passenger no longer at position
+                neg(('free', 'p')),
+                ('on_taxi', 'p'),  # Passenger is now in taxi
             ),
         ),
         Action(
@@ -98,11 +99,13 @@ def create_domain_one_passenger():
                 ('passenger', 'p'),
             ),
             preconditions=(
-                ('free', 'p'),
-                ('at', 't', 'px', 'py'),
+                ('at', 't', 'px', 'py'),  # Taxi is at position
+                ('on_taxi', 'p'),  # Passenger is in taxi
             ),
             effects=(
-                neg(('on_taxi', 't'))
+                neg(('on_taxi', 'p')),  # Passenger no longer in taxi
+                ('at', 'p', 'px', 'py'),  # Passenger now at taxi's position
+                ('free', 'p')
             ),
         ),
     ))

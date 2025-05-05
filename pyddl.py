@@ -6,12 +6,13 @@ from itertools import product
 import operator as ops
 
 NUM_OPS = {
-    '>' : ops.gt,
-    '<' : ops.lt,
-    '=' : ops.eq,
+    '>': ops.gt,
+    '<': ops.lt,
+    '=': ops.eq,
     '>=': ops.ge,
     '<=': ops.le
 }
+
 
 class Domain(object):
 
@@ -40,6 +41,7 @@ class Domain(object):
                 param_combos.add(param_set)
                 grounded_actions.append(action.ground(*params))
         return grounded_actions
+
 
 class Problem(object):
 
@@ -73,6 +75,7 @@ class Problem(object):
                 self.num_goals.append(ng)
             else:
                 self.goals.append(g)
+
 
 class State(object):
 
@@ -128,9 +131,11 @@ class State(object):
 
     def __str__(self):
         return ('Predicates:\n%s' % '\n'.join(map(str, self.predicates))
-                +'\nFunctions:\n%s' % '\n'.join(map(str, self.functions)))
+                + '\nFunctions:\n%s' % '\n'.join(map(str, self.functions)))
+
     def __lt__(self, other):
         return hash(self) < hash(other)
+
 
 def neg(effect):
     """
@@ -138,10 +143,12 @@ def neg(effect):
     """
     return (-1, effect)
 
+
 class Action(object):
     """
     An action schema
     """
+
     def __init__(self, name, parameters=(), preconditions=(), effects=(),
                  unique=False, no_permute=False):
         """
@@ -173,6 +180,7 @@ class Action(object):
         arglist = ', '.join(['%s - %s' % pair for pair in zip(self.arg_names, self.types)])
         return '%s(%s)' % (self.name, arglist)
 
+
 def _grounder(arg_names, args):
     """
     Returns a function for grounding predicates and function symbols
@@ -180,14 +188,18 @@ def _grounder(arg_names, args):
     namemap = dict()
     for arg_name, arg in zip(arg_names, args):
         namemap[arg_name] = arg
+
     def _ground_by_names(predicate):
         return predicate[0:1] + tuple(namemap.get(arg, arg) for arg in predicate[1:])
+
     return _ground_by_names
+
 
 def _num_pred(op, x, y):
     """
     Returns a numerical predicate that is called on a State.
     """
+
     def predicate(state):
         operands = [0, 0]
         for i, o in enumerate((x, y)):
@@ -196,7 +208,9 @@ def _num_pred(op, x, y):
             else:
                 operands[i] = state.f_dict[o]
         return op(*operands)
+
     return predicate
+
 
 def _num_effect(ground, sign, x):
     """
@@ -207,16 +221,18 @@ def _num_effect(ground, sign, x):
 
     def effect(state):
         if type(x) == int:
-            return sign*x
+            return sign * x
         else:
-            return sign*state.f_dict[x]
+            return sign * state.f_dict[x]
 
     return effect
+
 
 class _GroundedAction(object):
     """
     An action schema that has been grounded with objects
     """
+
     def __init__(self, action, *args):
         self.name = action.name
         ground = _grounder(action.arg_names, args)

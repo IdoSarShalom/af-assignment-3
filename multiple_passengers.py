@@ -2,10 +2,11 @@ from __future__ import print_function
 from pyddl import Domain, Action, neg
 from planner import planner
 
+
 def create_domain_multiple_passengers():
     domain = Domain((
         Action(
-            'move-up',  
+            'move-up',
             parameters=(
                 ('taxi', 't'),
                 ('position', 'px'),  # Current location on the x-axis
