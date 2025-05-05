@@ -14,11 +14,11 @@ def create_domain_one_passenger():
                 ('position', 'by'),  # New location on the y-axis
             ),
             preconditions=(
-                ('dec', 'py', 'by'), # by = py - 1
-                ('at', 't', 'px', 'py'), # TODO: shouldn't it be by instead of py?
+                ('dec', 'py', 'by'),  # by = py - 1
+                ('at', 't', 'px', 'py'),  # TODO: shouldn't it be by instead of py?
             ),
             effects=(
-                neg(('at', 't', 'px', 'py')), # TODO: and also in here
+                neg(('at', 't', 'px', 'py')),  # TODO: and also in here
                 ('at', 't', 'px', 'by'),
             ),
         ),
@@ -31,7 +31,7 @@ def create_domain_one_passenger():
                 ('position', 'by'),
             ),
             preconditions=(
-                ('inc', 'py', 'by'), # by = py + 1
+                ('inc', 'py', 'by'),  # by = py + 1
                 ('at', 't', 'px', 'py'),
             ),
             effects=(
