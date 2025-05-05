@@ -2,7 +2,6 @@ from __future__ import print_function
 from time import time
 import heapq
 
-
 def planner(problem, heuristic=None, state0=None, goal=None,
             monotone=False, verbose=True):
     """
@@ -43,7 +42,7 @@ def planner(problem, heuristic=None, state0=None, goal=None,
             dur = time() - start
             if verbose:
                 print('States Explored: %d' % states_explored)
-                print('Time per state: %.3f ms' % (1000 * dur / states_explored))
+                print('Time per state: %.3f ms' % (1000*dur / states_explored))
                 print('Plan length: %d' % node.cost)
             return plan
 
@@ -70,7 +69,6 @@ def null_heuristic(state):
     """Admissible, but trivial heuristic"""
     return 0
 
-
 def plan_cost(plan):
     """Convert a plan to a cost, handling nonexistent plans"""
     if plan is None:
@@ -78,20 +76,15 @@ def plan_cost(plan):
     else:
         return len(plan)
 
-
 def monotone_heuristic(problem):
     """Heuristic that finds plans using only add lists of actions"""
-
     def h(state):
         monotone_plan = planner(problem, null_heuristic, state, monotone=True, verbose=False)
         return plan_cost(monotone_plan)
-
     return h
-
 
 def subgoal_heuristic(problem):
     """Heuristic that computes the max cost of plans across all subgoals"""
-
     def h(state):
         costs = []
         for g in problem.goals:
@@ -101,5 +94,4 @@ def subgoal_heuristic(problem):
             subgoal_plan = planner(problem, null_heuristic, state, ((), (g,)))
             costs.append(plan_cost(subgoal_plan))
         return max(costs)
-
     return h
