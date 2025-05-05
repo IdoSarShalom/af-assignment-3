@@ -81,6 +81,7 @@ def problem_multiple_passengers(verbose, domain):
         if len(plan) == 13:
             print("Successfully created a plan for problem 2 (multiple passengers)")
             for action in plan:
+
                 print(action)
         else:
             print("Wrong plan was found for problem 2 (multiple passengers)")
