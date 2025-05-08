@@ -1,7 +1,5 @@
 from __future__ import print_function
 from pyddl import Domain, Action, neg
-from planner import planner
-
 
 def create_domain_multiple_passengers():
     domain = Domain((
@@ -14,12 +12,12 @@ def create_domain_multiple_passengers():
                 ('position', 'by'),  # New location on the y-axis
             ),
             preconditions=(
-                ('dec', 'py', 'by'),
-                ('at', 't', 'px', 'py'),
+                ('dec', 'py', 'by'),  # by = py - 1 (up decreases y)
+                ('at', 't', 'px', 'py'),  # Taxi is at current position
             ),
             effects=(
-                neg(('at', 't', 'px', 'py')),
-                ('at', 't', 'px', 'by'),
+                neg(('at', 't', 'px', 'py')),  # Remove old position
+                ('at', 't', 'px', 'by'),       # Set new position
             ),
         ),
         Action(
@@ -31,12 +29,12 @@ def create_domain_multiple_passengers():
                 ('position', 'by'),
             ),
             preconditions=(
-
-
+                ('inc', 'py', 'by'),  # by = py + 1 (down increases y)
+                ('at', 't', 'px', 'py'),  # Taxi is at current position
             ),
             effects=(
-
-
+                neg(('at', 't', 'px', 'py')),  # Remove old position
+                ('at', 't', 'px', 'by'),       # Set new position
             ),
         ),
         Action(
@@ -48,12 +46,12 @@ def create_domain_multiple_passengers():
                 ('position', 'bx'),
             ),
             preconditions=(
-
-
+                ('dec', 'px', 'bx'),  # bx = px - 1 (left decreases x)
+                ('at', 't', 'px', 'py'),  # Taxi is at current position
             ),
             effects=(
-
-
+                neg(('at', 't', 'px', 'py')),  # Remove old position
+                ('at', 't', 'bx', 'py'),       # Set new position
             ),
         ),
         Action(
@@ -65,12 +63,12 @@ def create_domain_multiple_passengers():
                 ('position', 'bx'),
             ),
             preconditions=(
-
-
+                ('inc', 'px', 'bx'),  # bx = px + 1 (right increases x)
+                ('at', 't', 'px', 'py'),  # Taxi is at current position
             ),
             effects=(
-
-
+                neg(('at', 't', 'px', 'py')),  # Remove old position
+                ('at', 't', 'bx', 'py'),       # Set new position
             ),
         ),
         Action(
@@ -82,12 +80,12 @@ def create_domain_multiple_passengers():
                 ('passenger', 'p'),
             ),
             preconditions=(
-
-
+                ('at', 't', 'px', 'py'),  # Taxi is at position
+                ('at', 'p', 'px', 'py'),  # Passenger is at same position
             ),
             effects=(
-
-
+                neg(('at', 'p', 'px', 'py')),  # Passenger no longer at position
+                ('on_taxi', 'p'),              # Passenger is on taxi
             ),
         ),
         Action(
@@ -99,12 +97,12 @@ def create_domain_multiple_passengers():
                 ('passenger', 'p'),
             ),
             preconditions=(
-
-
+                ('at', 't', 'px', 'py'),  # Taxi is at position
+                ('on_taxi', 'p'),         # Passenger is on taxi
             ),
             effects=(
-
-
+                neg(('on_taxi', 'p')),    # Passenger no longer on taxi
+                ('at', 'p', 'px', 'py'),  # Passenger now at position
             ),
         ),
     ))
