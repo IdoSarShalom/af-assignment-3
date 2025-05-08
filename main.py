@@ -97,7 +97,7 @@ if __name__ == '__main__':
     # Parse arguments
     opts, args = parser.parse_args()
     domain = create_domain_one_passenger()
-    problem_one_passenger(opts.verbose, domain)
+    problem_one_passenger(True, domain)
 
     domain = create_domain_multiple_passengers()
     problem_multiple_passengers(opts.verbose, domain)

@@ -100,7 +100,6 @@ def create_domain_one_passenger():
             ),
             preconditions=(
                 ('at', 't', 'px', 'py'),  # Taxi is at position
-                neg(('free', 't')),       # Taxi is not free
                 ('on_taxi', 'p'),         # Passenger is on taxi
             ),
             effects=(
